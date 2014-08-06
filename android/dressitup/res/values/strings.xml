@@ -1,5 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">dressitup</string>
+    <string name="app_name">DressItUp</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_menu">DressItUp | Menu</string>    
+    <string name="contentDescription">image</string>    
+    <string name="quick_suggestion">QUICK SUGGESTION</string>    
+    <string name="add_clothing">ADD CLOTHING</string>    
+    <string name="view_closet">VIEW CLOSET</string>    
 
 </resources>
