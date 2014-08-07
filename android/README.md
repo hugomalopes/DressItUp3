@@ -1,4 +1,4 @@
-DressItUp3 - Web Application
+DressItUp3 - Android Application
 ==========
 
-This directory contains the DressItUp android and database project.
+This directory contains the DressItUp android and database projects.
