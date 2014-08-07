@@ -7,6 +7,8 @@
     <string name="contentDescription">image</string>    
     <string name="quick_suggestion">QUICK SUGGESTION</string>    
     <string name="add_clothing">ADD CLOTHING</string>    
-    <string name="view_closet">VIEW CLOSET</string>    
+    <string name="view_closet">VIEW CLOSET</string>
+    <string name="add_clothing_scanning">Scanning</string>
+    <string name="add_clothing_scan">Scan</string>
 
 </resources>
