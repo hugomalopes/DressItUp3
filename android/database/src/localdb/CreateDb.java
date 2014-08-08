@@ -8,6 +8,12 @@ public class CreateDb {
 	/** The Data Base Manager (connection & utilities). */
 	private DbManager dbManager = null;
     
+	/** The android metadata table */
+	private String androidTable;
+	
+	/** The android metadata table */
+	private String insertAndroidTable;
+	
     /** The user table. */
     private String userTable;
     
@@ -24,16 +30,31 @@ public class CreateDb {
      */
     public CreateDb(DbManager dbManager) throws Exception {
     	this.dbManager = dbManager;
+    	this.setAndroidTable();
     	this.setUserTable();
     	this.setClothingTable();
     	this.setFutureClothingTable();
     }
     
+    private void setAndroidTable() {
+    	this.androidTable = "CREATE TABLE android_metadata" + 
+    								"(locale TEXT DEFAULT 'en_US')";
+    	this.insertAndroidTable = "INSERT INTO android_metadata VALUES ('en_US')";
+    }
+    
+    private String getAndroidTable() {
+    	return this.androidTable;
+    }
+    
+    private String getInsertAndroidTable() {
+    	return this.insertAndroidTable;
+    }
+    
     private void setUserTable() {
     	this.userTable = "CREATE TABLE user " +
-									"(uid		INTEGER	PRIMARY KEY	AUTOINCREMENT	NOT NULL," +
+									"(_id		INTEGER	PRIMARY KEY	AUTOINCREMENT	NOT NULL," +
 						            " username  TEXT    NOT NULL," +
-									" UNIQUE(uid, username))";
+									" UNIQUE(_id, username))";
     }
     
     private String getUserTable () {
@@ -42,7 +63,7 @@ public class CreateDb {
     
     private void setClothingTable() {
     	this.clothingTable = "CREATE TABLE clothing " +
-									"(uid 		INTEGER	PRIMARY KEY	AUTOINCREMENT	NOT NULL," +
+									"(_id 		INTEGER	PRIMARY KEY	AUTOINCREMENT	NOT NULL," +
 									" type		TEXT    NOT NULL," + 
 						            " category 	TEXT 	NOT NULL," + 
 									" brand		TEXT	NOT NULL," +
@@ -75,7 +96,12 @@ public class CreateDb {
     public void execute() throws Exception {
     	System.out.println("CreateDb::execute >> Start table creation");
     	dbManager.executeStmt("PRAGMA foreign_keys = ON;");
-
+    	
+    	dbManager.executeStmt(dropTable("android_metadata"));;
+    	dbManager.executeStmt(this.getAndroidTable());
+    	System.out.println("CreateDb::execute >> Android Metadata Table created");
+    	dbManager.executeStmt(this.getInsertAndroidTable());
+    	System.out.println("CreateDb::execute >> Inserted data on Android Metadata Table successfully");
     	dbManager.executeStmt(dropTable("user"));;
     	dbManager.executeStmt(this.getUserTable());
     	System.out.println("CreateDb::execute >> User Table created");
