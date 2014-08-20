@@ -1,4 +1,6 @@
-package com.app.dressitup;
+package com.app.dressitup.ui;
+
+import com.app.dressitup.R;
 
 import android.app.Activity;
 import android.content.Intent;

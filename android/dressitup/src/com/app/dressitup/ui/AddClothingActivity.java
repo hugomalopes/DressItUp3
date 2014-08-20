@@ -4,8 +4,9 @@
  * 
  * Created by lisah0 on 2012-02-24
  */
-package com.app.dressitup;
+package com.app.dressitup.ui;
 
+import com.app.dressitup.R;
 import com.app.dressitup.qrreader.CameraPreview;
 
 import android.app.Activity;
