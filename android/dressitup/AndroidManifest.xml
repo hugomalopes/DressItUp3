@@ -5,8 +5,8 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="16"
-        android:targetSdkVersion="19" />
+        android:minSdkVersion="L"
+        android:targetSdkVersion="20" />
     
     <!-- 3 permission rules to use ZBar barcode and QR reader -->
     <uses-permission android:name="android.permission.CAMERA" />
