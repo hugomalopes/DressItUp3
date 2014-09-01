@@ -1,38 +1,51 @@
 package com.app.dressitup.httpwrapper;
 
 import java.io.IOException;
-import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.util.Cookie;
-
+/** This is a test to wrapp clothing sites like Zara to extract clothing info
+ * 
+ * @author Hugo
+ * 
+ * Redireccionamento site Zara
+ * 
+ * Primeiro o link do código qr é algo assim:
+ * http://www.zara.com/qr/01446301403048
+ *
+ * Que após a configuração das cookies vai gravar a língua e o país e no fim dá origem a um link assim:
+ * http://www.zara.com/webapp/wcs/stores/servlet/qr/01446301403048
+ *
+ * Nessa página dentro de uma função javascript há algo assim:
+ * result = servlet + '/' + storeId + '/' + langId  + '/-c0p' + productId + '.html';
+ *
+ * Que dá origem a um link deste género, que redirecciona automaticamente para o link final da roupa (sem javascript):
+ * http://www.zara.com/pt/pt/-c0p1983094.html
+ *
+ */
 public class ZaraSiteParser implements SiteParser {
 	
 	private Document document;
 	
-	public ZaraSiteParser(String url) throws IOException {
-		/** HTMLUnit block used to run javascript url redirection and get the clothing specific url */
-		//turn off all the annoying log warnings
-		java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF); 
-		
-		WebClient webClient = new WebClient();
-		//Prevents crashing from bad javascript functions
-		webClient.getOptions().setThrowExceptionOnScriptError(false);
-		//Injection of necessary cookie to be redirect to the specific clothing url - contains country and language info
-		webClient.getCookieManager().addCookie(new Cookie(".www.zara.com", "WC_ZaraStoreId", "pt%2Cpt"));
-		HtmlPage htmlPage = webClient.getPage(url);
-		String redirectedUrl = htmlPage.getUrl().toString();
-		/** End of HTMLUnit block */
-		
-		/** JSOUP block used to scrap static html page */
+	public ZaraSiteParser(String qrUrl) throws IOException {
+
+		// Follow the first url redirection to get productId
+		String redirectedUrl = "http://www.zara.com/webapp/wcs/stores/servlet" + qrUrl.replace("http://www.zara.com", "");
 		document = Jsoup.connect(redirectedUrl).get();
-		/** End of JSOUP block */
+		Pattern pattern = Pattern.compile("productId = '[0-9]+");
+		Matcher matcher = pattern.matcher(document.select("script").toString());
+		String productId = null;
+		while(matcher.find())
+			productId = matcher.group(0).replace("productId = '", "");
+
+		// Get the final clothing url using productId
+		String clothingUrl = "http://www.zara.com/pt/pt/-c0p" + productId + ".html";
+		document = Jsoup.connect(clothingUrl).get();
 	}
 	
 	public String getReference() {
@@ -67,5 +80,4 @@ public class ZaraSiteParser implements SiteParser {
 		String imageURL = image.getAllElements().attr("src");
 		return imageURL;
 	}
-
 }
