@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity 
-            android:name="AddClothingActivity">
+            android:name=".ui.AddClothingActivity">
         </activity>
     </application>
 
