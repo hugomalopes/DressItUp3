@@ -13,6 +13,26 @@
   />
 
   <TextView
+    android:id="@+id/clothingBrand"
+    android:layout_height="wrap_content" 
+    android:layout_width="match_parent">
+  </TextView>
+    <TextView
+    android:id="@+id/clothingReference"
+    android:layout_height="wrap_content" 
+    android:layout_width="match_parent">
+  </TextView>
+    <TextView
+    android:id="@+id/clothingCategory"
+    android:layout_height="wrap_content" 
+    android:layout_width="match_parent">
+  </TextView>
+    <TextView
+    android:id="@+id/clothingColor"
+    android:layout_height="wrap_content" 
+    android:layout_width="match_parent">
+  </TextView>
+  <TextView
     android:id="@+id/scanText"
     android:text="@string/add_clothing_scanning"
     android:layout_height="wrap_content" 

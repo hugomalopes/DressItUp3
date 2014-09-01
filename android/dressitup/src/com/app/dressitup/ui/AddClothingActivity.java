@@ -7,12 +7,14 @@
 package com.app.dressitup.ui;
 
 import com.app.dressitup.R;
+import com.app.dressitup.httpwrapper.GenericSiteParser;
 import com.app.dressitup.qrreader.CameraPreview;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
@@ -36,6 +38,10 @@ public class AddClothingActivity extends Activity
     private CameraPreview mPreview;
     private Handler autoFocusHandler;
 
+    TextView clothingBrand;
+    TextView clothingReference;
+    TextView clothingCategory;
+    TextView clothingColor;
     TextView scanText;
     Button scanButton;
 
@@ -51,6 +57,10 @@ public class AddClothingActivity extends Activity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // WARNING - USED TO LET THREAD ACCESS TO THE INTERNET - MUST STUDY THIS
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        
         setContentView(R.layout.activity_add_clothing);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -68,7 +78,11 @@ public class AddClothingActivity extends Activity
         preview.addView(mPreview);
 
         scanText = (TextView)findViewById(R.id.scanText);
-
+        clothingBrand = (TextView)findViewById(R.id.clothingBrand);
+        clothingReference = (TextView)findViewById(R.id.clothingReference);
+        clothingCategory = (TextView)findViewById(R.id.clothingCategory);
+        clothingColor = (TextView)findViewById(R.id.clothingColor);
+        
         scanButton = (Button)findViewById(R.id.ScanButton);
 
         scanButton.setOnClickListener(new OnClickListener() {
@@ -135,6 +149,15 @@ public class AddClothingActivity extends Activity
                     for (Symbol sym : syms) {
                         scanText.setText("barcode result " + sym.getData());
                         barcodeScanned = true;
+                        
+                        GenericSiteParser genericSiteParser;
+                        try {
+                        	genericSiteParser = new GenericSiteParser(sym.getData());
+                        	clothingBrand.setText(genericSiteParser.getBrand());
+                        	clothingReference.setText(genericSiteParser.getReference());
+                        	clothingCategory.setText(genericSiteParser.getCategory());
+                        	clothingColor.setText(genericSiteParser.getColor());
+                        } catch(Exception e) {clothingBrand.setText(e.getMessage());}
                     }
                 }
             }
