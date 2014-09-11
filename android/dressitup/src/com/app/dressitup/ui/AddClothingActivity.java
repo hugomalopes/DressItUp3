@@ -7,14 +7,12 @@
 package com.app.dressitup.ui;
 
 import com.app.dressitup.R;
-import com.app.dressitup.httpwrapper.GenericSiteParser;
 import com.app.dressitup.qrreader.CameraPreview;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.StrictMode;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
@@ -57,10 +55,6 @@ public class AddClothingActivity extends Activity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // WARNING - USED TO LET THREAD ACCESS TO THE INTERNET - MUST STUDY THIS
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        
         setContentView(R.layout.activity_add_clothing);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -147,17 +141,14 @@ public class AddClothingActivity extends Activity
                     
                     SymbolSet syms = scanner.getResults();
                     for (Symbol sym : syms) {
-                        scanText.setText("barcode result " + sym.getData());
+                    	String url = sym.getData();
+                    	
+                        scanText.setText("barcode result " + url);
                         barcodeScanned = true;
                         
-                        GenericSiteParser genericSiteParser;
-                        try {
-                        	genericSiteParser = new GenericSiteParser(sym.getData());
-                        	clothingBrand.setText(genericSiteParser.getBrand());
-                        	clothingReference.setText(genericSiteParser.getReference());
-                        	clothingCategory.setText(genericSiteParser.getCategory());
-                        	clothingColor.setText(genericSiteParser.getColor());
-                        } catch(Exception e) {clothingBrand.setText(e.getMessage());}
+                        // Launch an async task to connect to the clothing website and get info
+                        AddClothingSiteParserTask task = new AddClothingSiteParserTask(clothingBrand, clothingReference, clothingCategory, clothingColor);
+                        task.execute(url);
                     }
                 }
             }
