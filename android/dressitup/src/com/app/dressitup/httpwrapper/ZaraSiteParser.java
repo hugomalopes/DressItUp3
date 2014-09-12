@@ -57,11 +57,8 @@ public class ZaraSiteParser implements SiteParser {
 	
 	public String getCategory() {
 		// Get the clothing category
-		Elements categoryElements = document.getElementsByAttributeValueContaining("class", "current selected");
-		if(categoryElements.isEmpty())
-			categoryElements = document.getElementsByAttributeValueContaining("class", "current  selected");
-		Element selectedCategoryElement = categoryElements.get(0).child(0);
-		String category = selectedCategoryElement.text();
+		String[] baseUriSplit = document.baseUri().split("/");
+		String category = baseUriSplit[6];
 		return category;
 	}
 	
