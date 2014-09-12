@@ -119,7 +119,9 @@ public class CreateDb {
     public static void main(String[] args) throws Exception {
     	DbManager manager = new DbManager();
     	CreateDb db = new CreateDb(manager);
+    	InsertDb idb = new InsertDb(manager);
     	db.execute();
+    	idb.insertClothing();
     	System.out.println("DataBase successfully created!");
     }
 }
