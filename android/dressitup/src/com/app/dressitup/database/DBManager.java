@@ -2,6 +2,7 @@ package com.app.dressitup.database;
 
 import java.util.ArrayList;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -84,5 +85,15 @@ public class DBManager extends SQLiteAssetHelper {
 		return list;
 	}
 	
+	public void insertClothing(String type, String category, String brand, String reference, String color) {
+		ContentValues cv = new ContentValues();
+		cv.put(KEY_CLOTHING_TYPE, type);
+		cv.put(KEY_CLOTHING_CATEGORY, category);
+		cv.put(KEY_CLOTHING_BRAND, brand);
+		cv.put(KEY_CLOTHING_REFERENCE, reference);
+		cv.put(KEY_CLOTHING_COLOR, color);
+		SQLiteDatabase db = getReadableDatabase();
+		db.insert(TABLE_CLOTHING, null, cv);
+	}
 	
 }

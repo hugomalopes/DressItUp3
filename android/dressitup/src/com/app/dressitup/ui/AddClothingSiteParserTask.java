@@ -1,5 +1,6 @@
 package com.app.dressitup.ui;
 
+import com.app.dressitup.database.DBManager;
 import com.app.dressitup.httpwrapper.GenericSiteParser;
 
 import android.os.AsyncTask;
@@ -13,12 +14,15 @@ import android.widget.TextView;
  */
 public class AddClothingSiteParserTask extends AsyncTask<String, Void, GenericSiteParser> {
 	
+	private DBManager dbManager;
 	private TextView clothingBrand;
     private TextView clothingReference;
     private TextView clothingCategory;
     private TextView clothingColor;
+    private String type, category, brand, reference, color;
     
-    public AddClothingSiteParserTask(TextView clothingBrand, TextView clothingReference, TextView clothingCategory, TextView clothingColor) {
+    public AddClothingSiteParserTask(DBManager dbManager, TextView clothingBrand, TextView clothingReference, TextView clothingCategory, TextView clothingColor) {
+    	this.dbManager = dbManager;
     	this.clothingBrand = clothingBrand;
     	this.clothingReference = clothingReference;
     	this.clothingCategory = clothingCategory;
@@ -41,10 +45,15 @@ public class AddClothingSiteParserTask extends AsyncTask<String, Void, GenericSi
 			clothingBrand.setText("Can't get clothing info :(");
 		}
 		else {
-			clothingBrand.setText(genericSiteParser.getBrand());
-        	clothingReference.setText(genericSiteParser.getReference());
-        	clothingCategory.setText(genericSiteParser.getCategory());
-        	clothingColor.setText(genericSiteParser.getColor());
+			category = genericSiteParser.getCategory();
+			brand = genericSiteParser.getBrand();
+			reference = genericSiteParser.getReference();
+			color = genericSiteParser.getColor();
+			clothingCategory.setText(category);
+			clothingBrand.setText(brand);
+        	clothingReference.setText(reference);
+        	clothingColor.setText(color);
+        	dbManager.insertClothing(type, category, brand, reference, color);
 		}
 	}
 }

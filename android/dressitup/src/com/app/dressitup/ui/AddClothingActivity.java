@@ -7,6 +7,7 @@
 package com.app.dressitup.ui;
 
 import com.app.dressitup.R;
+import com.app.dressitup.database.DBManager;
 import com.app.dressitup.qrreader.CameraPreview;
 
 import android.app.Activity;
@@ -35,6 +36,8 @@ public class AddClothingActivity extends Activity
     private Camera mCamera;
     private CameraPreview mPreview;
     private Handler autoFocusHandler;
+    
+    private DBManager dbManager;
 
     TextView clothingBrand;
     TextView clothingReference;
@@ -55,6 +58,8 @@ public class AddClothingActivity extends Activity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        dbManager = new DBManager(this);
+        
         setContentView(R.layout.activity_add_clothing);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -147,7 +152,7 @@ public class AddClothingActivity extends Activity
                         barcodeScanned = true;
                         
                         // Launch an async task to connect to the clothing website and get info
-                        AddClothingSiteParserTask task = new AddClothingSiteParserTask(clothingBrand, clothingReference, clothingCategory, clothingColor);
+                        AddClothingSiteParserTask task = new AddClothingSiteParserTask(dbManager, clothingBrand, clothingReference, clothingCategory, clothingColor);
                         task.execute(url);
                     }
                 }
