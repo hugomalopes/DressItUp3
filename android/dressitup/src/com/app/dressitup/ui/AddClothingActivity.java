@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.AutoFocusCallback;
@@ -39,6 +40,7 @@ public class AddClothingActivity extends Activity
     
     private DBManager dbManager;
 
+    ImageView clothingImage;
     TextView clothingBrand;
     TextView clothingReference;
     TextView clothingCategory;
@@ -77,6 +79,7 @@ public class AddClothingActivity extends Activity
         preview.addView(mPreview);
 
         scanText = (TextView)findViewById(R.id.scanText);
+        clothingImage = (ImageView)findViewById(R.id.clothingImage);
         clothingBrand = (TextView)findViewById(R.id.clothingBrand);
         clothingReference = (TextView)findViewById(R.id.clothingReference);
         clothingCategory = (TextView)findViewById(R.id.clothingCategory);
@@ -152,7 +155,7 @@ public class AddClothingActivity extends Activity
                         barcodeScanned = true;
                         
                         // Launch an async task to connect to the clothing website and get info
-                        AddClothingSiteParserTask task = new AddClothingSiteParserTask(dbManager, clothingBrand, clothingReference, clothingCategory, clothingColor);
+                        AddClothingSiteParserTask task = new AddClothingSiteParserTask(getApplicationContext(), dbManager, clothingImage, clothingBrand, clothingReference, clothingCategory, clothingColor);
                         task.execute(url);
                     }
                 }

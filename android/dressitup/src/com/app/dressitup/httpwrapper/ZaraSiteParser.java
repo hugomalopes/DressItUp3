@@ -52,6 +52,7 @@ public class ZaraSiteParser implements SiteParser {
 		// Get the clothing reference number
 		Elements referenceElements = document.getElementsByClass("reference");
 		String reference = referenceElements.text();
+		reference = reference.replace('/', '-');
 		return reference;
 	}
 	
@@ -74,7 +75,7 @@ public class ZaraSiteParser implements SiteParser {
 		// Get image URL
 		Elements imageElements = document.getElementsByClass("media-wrap").select(".plain");
 		Element image = imageElements.get(0);
-		String imageURL = image.getAllElements().attr("src");
+		String imageURL = "http:" + image.getAllElements().attr("src");
 		return imageURL;
 	}
 }
